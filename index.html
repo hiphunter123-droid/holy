@@ -1,40 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Commerce - 코인으로 쇼핑하세요</title>
+
+  <!-- CDN -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .app-wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #fafafa;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+
+<body>
+<div class="app-wrapper">
+
+<!-- Header -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-8 py-5 flex justify-between items-center">
+    <div class="text-2xl font-bold">LOGO</div>
+    <nav class="hidden md:flex gap-8">
+      <a href="#products">상품 보기</a>
+      <a href="#benefits">혜택 안내</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="py-20 text-center bg-white">
+  <h1 class="text-5xl font-bold mb-4">코인으로 더 저렴하게 쇼핑하세요!</h1>
+  <p class="text-gray-600 mb-8">USDT 결제 시 최대 10% 할인</p>
+  <button class="bg-black text-white px-6 py-3 rounded-lg">지금 시작하기</button>
+</section>
+
+<!-- Products -->
+<section class="py-20 px-8" id="products">
+  <h2 class="text-3xl font-bold mb-8">Apple 전자제품</h2>
+
+  <div class="relative overflow-hidden">
+    <div id="carousel-container" class="flex gap-6 transition-transform duration-500">
+
+      <!-- 카드 반복 -->
+      <div class="w-64 bg-white shadow rounded-lg p-4 flex-shrink-0">
+        <i data-lucide="smartphone"></i>
+        <h3>iPhone 15 Pro</h3>
+        <p>₩1,499,000</p>
+      </div>
+
+      <div class="w-64 bg-white shadow rounded-lg p-4 flex-shrink-0">
+        <i data-lucide="tablet"></i>
+        <h3>iPad Air</h3>
+        <p>₩899,000</p>
+      </div>
+
+      <div class="w-64 bg-white shadow rounded-lg p-4 flex-shrink-0">
+        <i data-lucide="watch"></i>
+        <h3>Apple Watch</h3>
+        <p>₩399,000</p>
+      </div>
+
+      <div class="w-64 bg-white shadow rounded-lg p-4 flex-shrink-0">
+        <i data-lucide="laptop"></i>
+        <h3>MacBook Air</h3>
+        <p>₩1,699,000</p>
+      </div>
+
+    </div>
+
+    <!-- 버튼 -->
+    <button id="prev-btn" class="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white px-3 py-2">‹</button>
+    <button id="next-btn" class="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white px-3 py-2">›</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center py-10 text-gray-500">
+  © 2024 Crypto Commerce
+</footer>
+
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Lucide 아이콘 안전 실행
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  // 아이콘 실행
+  if (window.lucide) lucide.createIcons();
 
-  // 캐러셀 요소 체크
-  const carouselContainer = document.getElementById('carousel-container');
-  const nextBtn = document.getElementById('next-btn');
-  const prevBtn = document.getElementById('prev-btn');
+  const container = document.getElementById("carousel-container");
+  const nextBtn = document.getElementById("next-btn");
+  const prevBtn = document.getElementById("prev-btn");
 
-  // 요소 없으면 캐러셀 기능 스킵 (에러 방지)
-  if (!carouselContainer || carouselContainer.children.length === 0) {
-    console.warn("캐러셀 요소 없음 - 스킵됨");
-    return;
-  }
+  if (!container) return;
 
-  let currentIndex = 0;
-
-  // 카드 width 안전 계산
-  function getCardWidth() {
-    const firstCard = carouselContainer.children[0];
-    return firstCard ? firstCard.offsetWidth : 0;
-  }
-
+  let index = 0;
   const gap = 24;
 
-  function updateCarousel() {
-    const cardWidth = getCardWidth();
-    if (!cardWidth) return;
+  function update() {
+    const card = container.children[0];
+    if (!card) return;
 
-    const cardWithGap = cardWidth + gap;
-    const offset = -currentIndex * cardWithGap;
+    const width = card.offsetWidth + gap;
+    container.style.transform = `translateX(-${index * width}px)`;
+  }
 
-    carouselContainer.style.transform = `translateX(${offset}px)`;
+  function maxIndex() {
+    return Math.max(0, container.children.length - 1);
+  }
+
+  nextBtn?.addEventListener("click", () => {
+    index = index < maxIndex() ? index + 1 : 0;
+    update();
+  });
+
+  prevBtn?.addEventListener("click", () => {
+    index = index > 0 ? index - 1 : maxIndex();
+    update();
+  });
+
+  setInterval(() => nextBtn?.click(), 5000);
+
+});
+</script>
+
+</body>
+</html>    carouselContainer.style.transform = `translateX(${offset}px)`;
   }
 
   function getMaxIndex() {
